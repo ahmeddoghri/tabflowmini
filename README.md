@@ -44,6 +44,46 @@ This is a small audit harness, not a magic anonymizer, and it will tell you
 exactly which of those four numbers to worry about before you ship the
 synthetic table anywhere near production.
 
+**Update:** that 0.026 churn_gap isn't evidence the model learned the churn
+relationship. `sample_synth`'s churn formula is the literal coefficients
+`data.make_table` uses to generate churn (`-1.0 + 0.08 * visits - 0.015 *
+(income - 70) + plan_bonus`) — copy-pasted, not fitted. `fit_synth` even
+computes a `churn_rate` field that the sampler never reads. On a table with
+a different (but equally plausible) true churn relationship, this same
+sampler's churn_gap blows up to 0.17-0.21. `sample_synth_v2` fits a real
+logistic regression on the observed columns instead, and generalizes to
+both the original table and randomized alternate relationships. Original
+numbers above are untouched. Details below.
+
+## The churn label wasn't learned, it was copied
+
+`synth.sample_synth` computes churn with
+`-1.0 + 0.08 * visits - 0.015 * (income - 70) + plan_bonus`, the exact
+same formula `data.make_table` uses to generate the "real" table in the
+first place. It isn't derived from `fit_synth`'s fitted means, stds, or
+correlations — it's the answer, hardcoded. `SynthModel.churn_rate` is
+computed from real data and then never referenced by the sampler at all.
+
+```bash
+python -m tabflowmini.eval_v2
+```
+```
+seeds        n    hardcoded churn_gap   learned churn_gap
+tuning      20                  0.173               0.012
+holdout     15                  0.206               0.010
+```
+
+`adversarial.make_table_variant` builds tables structurally identical to
+`data.make_table` but with randomized true churn coefficients per seed.
+The unmodified `sample_synth` — which only "knows" the original table's
+coefficients — degrades to a mean churn_gap of 0.17-0.21 on these tables.
+`synth_v2.sample_synth_v2` fits an actual (feature-standardized) logistic
+regression against each real table's observed visits/income/plan columns
+and holds a churn_gap near 0.01 on both the tuning sweep and a disjoint
+15-seed holdout evaluated once. `data.py`/`synth.py` are untouched, and
+the published numbers above still reproduce exactly; `sample_synth_v2` is
+opt-in.
+
 ## Research trail
 
 - Flow matching for generative modeling, 2024 tutorial: https://arxiv.org/abs/2412.06264

@@ -28,3 +28,5 @@ jobs:
         run: python examples/quickstart.py
       - name: Run benchmark
         run: python -m tabflowmini.benchmark
+      - name: Run churn-label leakage comparison
+        run: python -m tabflowmini.eval_v2
