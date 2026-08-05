@@ -2,7 +2,6 @@
 
 Fake tables are easy. Fake tables that don't quietly ruin your churn model are the actual assignment. tabflowmini grades itself on the second one.
 
-![CI](https://github.com/ahmeddoghri/tabflowmini/actions/workflows/ci.yml/badge.svg)
 ![python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![deps](https://img.shields.io/badge/runtime%20deps-none-success)
 ![license](https://img.shields.io/badge/license-MIT-black)
