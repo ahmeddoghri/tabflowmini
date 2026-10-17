@@ -2,9 +2,13 @@
 
 Fake tables are easy. Fake tables that don't quietly ruin your churn model are the actual assignment. tabflowmini grades itself on the second one.
 
+[![tests](https://github.com/ahmeddoghri/tabflowmini/actions/workflows/tests.yml/badge.svg)](https://github.com/ahmeddoghri/tabflowmini/actions/workflows/tests.yml)
 ![python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![deps](https://img.shields.io/badge/runtime%20deps-none-success)
 ![license](https://img.shields.io/badge/license-MIT-black)
+[![case study](https://img.shields.io/badge/case%20study-adoghri.com-e0703e)](https://adoghri.com/project-31.html)
+
+![tabflowmini](docs/cover.jpg)
 
 Synthetic tabular data can look completely plausible and still be worthless.
 It can match the column means and ruin the category balance, or preserve the
